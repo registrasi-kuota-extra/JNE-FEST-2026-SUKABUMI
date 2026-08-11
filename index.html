@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FF6B00">
+<meta name="description" content="Pemesanan tiket online resmi JNS Festival 2026 - Sukabumi oleh SADE Entertainment.">
+<title>JNS Festival 2026 — Sukabumi</title>
+
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --primary:#FF6B00;--primary-dark:#E05F00;--primary-light:#FFE8D6;
+    --ink:#111111;--ink-soft:#3a3a3a;--muted:#7a7a7a;
+    --line:rgba(0,0,0,0.07);--bg:#f4f4f5;--white:#ffffff;
+    --success:#16a34a;--success-bg:#f0fdf4;--success-border:#bbf7d0;
+    --soldout:#dc2626;--soldout-bg:#fef2f2;--soldout-border:#fecaca;
+    --warn-bg:#fffbeb;--warn-color:#d97706;--warn-border:#fde68a;
+    --btn-orange:#FF6B00;--btn-orange-hover:#E05F00;--btn-orange-disabled:#FBD5A8;
+    --card-shadow:0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+    --card-shadow-hover:0 8px 25px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --radius:12px;--radius-sm:8px;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;
+    padding-bottom:100px;-webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,107,0,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(230,0,126,0.04) 0%, transparent 50%);
+  }
+  a{text-decoration:none;color:inherit}
+  button{font-family:inherit;outline:none}
+
+  .header{background:rgba(255,255,255,0.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+  .header-inner{max-width:960px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+  .logo-link{display:flex;align-items:center;gap:10px}
+  .logo-img{height:36px;width:auto;object-fit:contain}
+  .header-right{display:flex;align-items:center;gap:10px}
+  .lang-selector, .user-icon{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--ink-soft);cursor:pointer;padding:6px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--white);font-weight:500;transition:all .2s}
+  .lang-selector:hover, .user-icon:hover{border-color:#bbb;background:#fafafa}
+  .user-icon{width:34px;height:34px;border-radius:50%}
+
+  .steps{background:var(--white);border-bottom:1px solid var(--line)}
+  .steps-inner{max-width:960px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:0;overflow-x:auto}
+  .step{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .step-num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;background:#f0f0f0;color:var(--muted);transition:all .35s cubic-bezier(.4,0,.2,1)}
+  .step.active .step-num{background:var(--btn-orange);color:var(--white);box-shadow:0 2px 10px rgba(255,107,0,0.35)}
+  .step-label{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+  .step.active .step-label{color:var(--ink);font-weight:700}
+  .step-divider{width:32px;height:2px;background:#e8e8e8;margin:0 8px;flex-shrink:0;border-radius:2px;transition:background .3s}
+  .step.active+.step-divider,.step-divider.passed{background:var(--btn-orange);opacity:.3}
+  @media(max-width:640px){.step-label{display:none}.step-divider{width:16px;margin:0 4px}.steps-inner{padding:14px 16px}}
+
+  .container{max-width:800px;margin:0 auto;padding:28px 24px}
+
+  .event-banner{width:100%;aspect-ratio:16/7.5;border-radius:var(--radius);overflow:hidden;position:relative;margin-bottom:28px;background:#e8e8e8;box-shadow:0 4px 20px rgba(0,0,0,0.08),0 1px 3px rgba(0,0,0,0.04)}
+  .event-banner img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+  .event-banner:hover img{transform:scale(1.02)}
+
+  .event-header{margin-bottom:36px}
+  .event-meta{display:inline-flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;background:var(--white);padding:6px 14px;border-radius:20px;border:1px solid var(--line)}
+  .event-meta-dot{width:3px;height:3px;background:#ccc;border-radius:50%}
+  .event-title{font-family:'Space Grotesk','Inter',sans-serif;font-size:30px;font-weight:800;line-height:1.15;margin-bottom:20px;letter-spacing:-0.8px;color:var(--ink)}
+  .event-info{display:flex;flex-wrap:wrap;gap:20px;font-size:14px}
+  .event-info-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);padding:14px 18px;border-radius:var(--radius-sm);border:1px solid var(--line);flex:1;min-width:200px;transition:box-shadow .2s}
+  .event-info-item:hover{box-shadow:var(--card-shadow-hover)}
+  .event-info-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#FFF5EB,#FFE8D6);display:grid;place-items:center;flex-shrink:0;color:var(--btn-orange)}
+  .event-info-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:2px;font-weight:700}
+  .event-info-value{font-weight:600;color:var(--ink);font-size:13px;line-height:1.4}
+
+  .section-title{font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;text-transform:uppercase;letter-spacing:1px;color:var(--ink)}
+  .section-title small{font-size:11px;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0}
+
+  .ticket-card{background:var(--white);border:1.5px solid var(--line);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:var(--card-shadow);position:relative}
+  .ticket-card:not(.sold-out):hover{border-color:rgba(255,107,0,0.25);box-shadow:var(--card-shadow-hover);transform:translateY(-1px)}
+  .ticket-card-inner{padding:22px 24px;display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+  .ticket-info{flex:1;min-width:0}
+  .ticket-name{font-size:16px;font-weight:800;margin-bottom:6px;color:var(--ink);letter-spacing:-0.2px}
+  .ticket-desc{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+  .ticket-price{font-family:'Space Grotesk','Inter',sans-serif;font-size:20px;font-weight:800;color:var(--btn-orange);letter-spacing:-0.5px}
+  .ticket-price small{font-size:12px;font-weight:500;color:var(--muted);font-family:'Inter',sans-serif}
+  .ticket-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center}
+  .badge{font-size:9px;padding:4px 10px;border-radius:5px;font-weight:800;letter-spacing:0.8px;text-transform:uppercase}
+  .badge-available{background:var(--success-bg);color:var(--success);border:1px solid var(--success-border)}
+  .badge-soldout{background:var(--soldout-bg);color:var(--soldout);border:1px solid var(--soldout-border)}
+  .badge-warning{background:var(--warn-bg);color:var(--warn-color);border:1px solid var(--warn-border);font-size:11px;text-transform:none;letter-spacing:0.2px;display:inline-flex;align-items:center;gap:4px}
+  
+  .pulse-warn{animation:pulseWarn 1.5s ease-in-out infinite}
+  @keyframes pulseWarn{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.8;transform:scale(1.05)}}
+
+  .ticket-card.sold-out{opacity:.55;pointer-events:none;user-select:none;box-shadow:none;border-style:dashed;border-color:#ddd;filter:saturate(0)}
+  .ticket-card.sold-out .ticket-name{text-decoration:line-through;text-decoration-color:#ccc}
+  .soldout-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+  .soldout-stamp{font-family:'Space Grotesk','Inter',sans-serif;font-size:28px;font-weight:900;color:rgba(220,38,38,0.18);letter-spacing:6px;text-transform:uppercase;transform:rotate(-12deg);border:4px solid rgba(220,38,38,0.12);padding:6px 28px;border-radius:8px}
+  .btn-unavailable{width:auto;padding:0 20px;height:40px;font-size:11px;font-weight:700;letter-spacing:1px;color:#ccc;border:1.5px dashed #ddd;border-radius:var(--radius-sm);background:transparent}
+
+  .ticket-action{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0}
+  .qty-control{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;background:var(--white);transition:border-color .2s,box-shadow .2s}
+  .qty-control:focus-within{border-color:var(--btn-orange);box-shadow:0 0 0 3px rgba(255,107,0,0.1)}
+  .qty-btn{width:40px;height:40px;background:var(--white);border:none;cursor:pointer;font-size:20px;color:var(--ink);display:grid;place-items:center;transition:all .15s;font-weight:500;line-height:1}
+  .qty-btn:hover:not(:disabled){background:#f8f8f8;color:var(--btn-orange)}
+  .qty-btn:active:not(:disabled){background:#f0f0f0;transform:scale(.92)}
+  .qty-btn:disabled{color:#d0d0d0;cursor:not-allowed}
+  .qty-value{width:44px;text-align:center;font-size:15px;font-weight:800;font-family:'Space Grotesk','Inter',sans-serif;color:var(--ink);border-left:1px solid var(--line);border-right:1px solid var(--line);height:40px;display:flex;align-items:center;justify-content:center;background:#fafafa;transition:transform 0.2s}
+  .qty-value.bounce{transform:scale(1.2)}
+  .qty-hint{font-size:10px;color:var(--muted);text-align:right;font-weight:500}
+
+  .section-divider{display:flex;align-items:center;gap:14px;margin:28px 0 20px}
+  .section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--line)}
+  .section-divider span{font-size:10px;font-weight:800;color:var(--btn-orange);text-transform:uppercase;letter-spacing:2px;white-space:nowrap}
+
+  .footer{background:var(--white);border-top:1px solid var(--line);padding:44px 24px;margin-top:48px;text-align:center}
+  .footer-logo{display:inline-block;margin-bottom:12px}
+  .footer-logo img{height:36px;width:auto;object-fit:contain}
+  .footer p{font-size:12px;color:var(--muted);line-height:1.7}
+  .footer-contact{margin:16px 0;font-size:13px;color:var(--ink-soft)}
+  .footer-contact div{margin-bottom:5px}
+  .footer-copy{margin-top:18px;font-size:11px;color:#bbb}
+
+  .sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:90;background:rgba(255,255,255,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--line);box-shadow:0 -4px 30px rgba(0,0,0,0.06);padding:16px 24px;padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px))}
+  .sticky-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:20px}
+  .sticky-total{display:flex;flex-direction:column}
+  .sticky-total-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:0.3px}
+  .sticky-total-value{font-family:'Space Grotesk','Inter',sans-serif;font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-0.5px;line-height:1.2;transition:color .3s}
+  .sticky-total-value.has-value{color:var(--btn-orange)}
+
+  .btn-checkout{background:var(--btn-orange);color:var(--white);border:none;padding:15px 36px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:all .25s cubic-bezier(.4,0,.2,1);letter-spacing:0.3px;position:relative;overflow:hidden}
+  .btn-checkout::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15) 0%,transparent 50%);pointer-events:none}
+  .btn-checkout:hover:not(:disabled){background:var(--btn-orange-hover);box-shadow:0 4px 18px rgba(255,107,0,0.35);transform:translateY(-1px)}
+  .btn-checkout:active:not(:disabled){transform:translateY(0);box-shadow:0 2px 8px rgba(255,107,0,0.25)}
+  .btn-checkout:disabled{background:var(--btn-orange-disabled);cursor:not-allowed;box-shadow:none;transform:none}
+  .btn-checkout:disabled::before{display:none}
+
+  .toast{position:fixed;bottom:120px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--ink);color:var(--white);padding:12px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.4,0,.2,1);z-index:200;max-width:88vw;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.2)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:520px){
+    .container{padding:20px 16px}
+    .event-title{font-size:24px}
+    .event-info{flex-direction:column;gap:10px}
+    .event-info-item{min-width:auto}
+    .ticket-card-inner{padding:16px 18px;flex-direction:column;gap:16px}
+    .ticket-action{flex-direction:row;align-items:center;justify-content:space-between;width:100%}
+    .btn-checkout{padding:13px 22px;font-size:13px}
+    .sticky-total-value{font-size:19px}
+    .header-inner{padding:10px 16px}
+    .soldout-stamp{font-size:22px;letter-spacing:4px;padding:4px 20px}
+    .event-banner{aspect-ratio:16/9}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition-duration:0.01ms!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="#" class="logo-link" aria-label="Beranda">
+      <img src="logo.png" alt="Logo Platform" class="logo-img" height="36">
+    </a>
+    <div class="header-right">
+      <div class="lang-selector" role="button" tabindex="0" aria-label="Pilih bahasa: Indonesia">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        ID
+      </div>
+      <div class="user-icon" role="button" tabindex="0" aria-label="Akun pengguna">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="steps" aria-label="Progress pemesanan">
+  <div class="steps-inner">
+    <div class="step active"><div class="step-num">1</div><div class="step-label">Pilih Kategori</div></div>
+    <div class="step-divider"></div>
+    <div class="step"><div class="step-num">2</div><div class="step-label">Data Pemesan</div></div>
+    <div class="step-divider"></div>
+    <div class="step"><div class="step-num">3</div><div class="step-label">Pembayaran</div></div>
+    <div class="step-divider"></div>
+    <div class="step"><div class="step-num">4</div><div class="step-label">E-Tiket</div></div>
+  </div>
+</nav>
+
+<main class="container">
+  <div class="event-banner">
+    <img src="banner.png" alt="Banner JNS Festival 2026 - Sukabumi" width="800" height="375" loading="eager">
+  </div>
+
+  <div class="event-header">
+    <div class="event-meta">
+      <span>Musik</span><span class="event-meta-dot"></span>
+      <span>Festival</span><span class="event-meta-dot"></span>
+      <span>Dewasa</span>
+    </div>
+    <h1 class="event-title">JNS Festival 2026 — Sukabumi</h1>
+    <div class="event-info">
+      <div class="event-info-item">
+        <div class="event-info-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <span class="event-info-label">Tanggal & Waktu</span>
+          <span class="event-info-value">18 Oktober 2026, 14:00 - 23:00 WIB</span>
+        </div>
+      </div>
+      <div class="event-info-item">
+        <div class="event-info-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <span class="event-info-label">Lokasi</span>
+          <span class="event-info-value">Sukabumi, Jawa Barat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section aria-label="Daftar tiket">
+    <div class="section-title">
+      Pilih Tiket
+      <small>Dipersembahkan oleh SADE Entertainment</small>
+    </div>
+
+    <div class="ticket-card sold-out" aria-disabled="true">
+      <div class="soldout-overlay"><div class="soldout-stamp">Sold Out</div></div>
+      <div class="ticket-card-inner">
+        <div class="ticket-info">
+          <div class="ticket-name">EARLY BIRD FESTIVAL</div>
+          <div class="ticket-desc">Tiket festival early bird dengan harga spesial untuk menikmati rangkaian acara JNS Festival 2026.</div>
+          <div class="ticket-price">Rp 75.000 <small>/tiket</small></div>
+          <div class="ticket-badges"><span class="badge badge-soldout">Sold Out</span></div>
+        </div>
+        <div class="ticket-action">
+          <button class="btn-unavailable" disabled>TIDAK TERSEDIA</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticket-card sold-out" aria-disabled="true">
+      <div class="soldout-overlay"><div class="soldout-stamp">Sold Out</div></div>
+      <div class="ticket-card-inner">
+        <div class="ticket-info">
+          <div class="ticket-name">EARLY BIRD VIP</div>
+          <div class="ticket-desc">Tiket VIP early bird dengan fasilitas terbaik dan spot strategis di area depan panggung utama.</div>
+          <div class="ticket-price">Rp 125.000 <small>/tiket</small></div>
+          <div class="ticket-badges"><span class="badge badge-soldout">Sold Out</span></div>
+        </div>
+        <div class="ticket-action">
+          <button class="btn-unavailable" disabled>TIDAK TERSEDIA</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>Presale 1</span></div>
+
+    <div class="ticket-card" data-ticket="presale1_festival" data-price="100000" data-name="Presale 1 Festival - JNS Festival 2026" data-max="10">
+      <div class="ticket-card-inner">
+        <div class="ticket-info">
+          <div class="ticket-name">PRESALE 1 FESTIVAL</div>
+          <div class="ticket-desc">Tiket festival presale 1 untuk menikmati seluruh rangkaian acara JNS Festival 2026.</div>
+          <div class="ticket-price">Rp 100.000 <small>/tiket</small></div>
+          <div class="ticket-badges">
+            <span class="badge badge-available">Available</span>
+            <span class="badge badge-warning pulse-warn">⚠️ Tersisa 15 Tiket</span>
+          </div>
+        </div>
+        <div class="ticket-action">
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" aria-label="Kurangi tiket Presale 1 Festival" type="button">−</button>
+            <div class="qty-value" role="status" aria-live="polite" aria-atomic="true">0</div>
+            <button class="qty-btn qty-plus" aria-label="Tambah tiket Presale 1 Festival" type="button">+</button>
+          </div>
+          <div class="qty-hint">Maks. 10 tiket</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ticket-card" data-ticket="presale1_vip" data-price="150000" data-name="Presale 1 VIP - JNS Festival 2026" data-max="10">
+      <div class="ticket-card-inner">
+        <div class="ticket-info">
+          <div class="ticket-name">PRESALE 1 VIP</div>
+          <div class="ticket-desc">Tiket VIP presale 1 dengan akses area eksklusif, spot strategis, dan fasilitas premium.</div>
+          <div class="ticket-price">Rp 150.000 <small>/tiket</small></div>
+          <div class="ticket-badges">
+            <span class="badge badge-available">Available</span>
+            <span class="badge badge-warning pulse-warn">⚠️ Tersisa 9 Tiket</span>
+          </div>
+        </div>
+        <div class="ticket-action">
+          <div class="qty-control">
+            <button class="qty-btn qty-minus" aria-label="Kurangi tiket Presale 1 VIP" type="button">−</button>
+            <div class="qty-value" role="status" aria-live="polite" aria-atomic="true">0</div>
+            <button class="qty-btn qty-plus" aria-label="Tambah tiket Presale 1 VIP" type="button">+</button>
+          </div>
+          <div class="qty-hint">Maks. 10 tiket</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  <a href="#" class="footer-logo">
+    <img src="logo.png" alt="Logo Platform" height="36">
+  </a>
+  <div class="footer-contact">
+    <div>&#128222; 085174296612</div>
+    <div>&#9993;&#65039; cs@jnsfestival.id</div>
+  </div>
+  <p>Platform tiket resmi untuk JNS Festival 2026.</p>
+  <p class="footer-copy">&copy; 2026 JNS Festival. All rights reserved.</p>
+</footer>
+
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-inner">
+    <div class="sticky-total">
+      <span class="sticky-total-label">Total (<span id="totalQtyDisplay" aria-live="polite" aria-atomic="true">0</span> tiket)</span>
+      <span class="sticky-total-value" id="stickyTotal" role="status" aria-live="polite" aria-atomic="true">Rp 0</span>
+    </div>
+    <button class="btn-checkout" id="checkoutBtn" disabled type="button" aria-label="Lanjutkan ke pembayaran">Lanjutkan ke Pembayaran</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(function(){
+  const formatRp = n => 'Rp ' + n.toLocaleString('id-ID');
+  let toastTimer;
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  const cart = {};
+  let totalQty = 0;
+  let totalPrice = 0;
+
+  const stickyTotal = document.getElementById('stickyTotal');
+  const totalQtyDisplay = document.getElementById('totalQtyDisplay');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const activeCards = document.querySelectorAll('.ticket-card[data-ticket]:not(.sold-out)');
+
+  activeCards.forEach(card => {
+    const id = card.dataset.ticket;
+    const price = parseInt(card.dataset.price, 10);
+    const name = card.dataset.name;
+    const maxQty = parseInt(card.dataset.max, 10) || 10;
+    cart[id] = { qty: 0, price, name, max: maxQty };
+
+    const plusBtn = card.querySelector('.qty-plus');
+    const minusBtn = card.querySelector('.qty-minus');
+    const qtyEl = card.querySelector('.qty-value');
+
+    plusBtn.addEventListener('click', () => {
+      if (cart[id].qty < cart[id].max) {
+        cart[id].qty++;
+        qtyEl.classList.add('bounce');
+        setTimeout(() => qtyEl.classList.remove('bounce'), 200);
+        updateUI();
+      } else {
+        showToast('Maksimal pembelian ' + cart[id].max + ' tiket untuk kategori ini');
+      }
+    });
+
+    minusBtn.addEventListener('click', () => {
+      if (cart[id].qty > 0) {
+        cart[id].qty--;
+        updateUI();
+      }
+    });
+  });
+
+  function updateUI(){
+    totalQty = 0;
+    totalPrice = 0;
+
+    activeCards.forEach(card => {
+      const id = card.dataset.ticket;
+      const qtyEl = card.querySelector('.qty-value');
+      const minusBtn = card.querySelector('.qty-minus');
+      const plusBtn = card.querySelector('.qty-plus');
+
+      qtyEl.textContent = cart[id].qty;
+      minusBtn.disabled = (cart[id].qty === 0);
+      plusBtn.disabled = (cart[id].qty >= cart[id].max);
+
+      totalQty += cart[id].qty;
+      totalPrice += (cart[id].qty * cart[id].price);
+    });
+
+    totalQtyDisplay.textContent = totalQty;
+    stickyTotal.textContent = formatRp(totalPrice);
+
+    if (totalQty > 0) {
+      stickyTotal.classList.add('has-value');
+      checkoutBtn.disabled = false;
+    } else {
+      stickyTotal.classList.remove('has-value');
+      checkoutBtn.disabled = true;
+    }
+  }
+
+  checkoutBtn.addEventListener('click', () => {
+    if (totalQty === 0) return;
+
+    checkoutBtn.disabled = true;
+    checkoutBtn.textContent = 'Memproses...';
+
+    const params = new URLSearchParams();
+    let hasItems = false;
+
+    Object.entries(cart).forEach(([id, item]) => {
+      if (item.qty > 0) {
+        params.append(id + '_name', item.name);
+        params.append(id + '_qty', item.qty);
+        params.append(id + '_harga', item.price);
+        params.append(id + '_total', item.qty * item.price);
+        hasItems = true;
+      }
+    });
+
+    if (hasItems) {
+      setTimeout(() => {
+        window.location.href = 'form.html?' + params.toString();
+      }, 350);
+    } else {
+      checkoutBtn.textContent = 'Lanjutkan ke Pembayaran';
+      checkoutBtn.disabled = false;
+    }
+  });
+
+  updateUI();
+})();
+</script>
+
+</body>
+</html>
