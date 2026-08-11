@@ -28,7 +28,6 @@
     --bg-grad-2: #0B0B14;
     --card-bg: rgba(255, 255, 255, 0.03);
     --card-border: rgba(255, 255, 255, 0.08);
-    --card-bg-solid: #15151F;
     --text-main: #FFFFFF;
     --text-muted: #9CA3AF;
     --warning: #F59E0B;
@@ -152,10 +151,7 @@
     position: relative; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
   .qr-wrap img { width: 220px; height: 220px; display: block; }
-  .qr-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; border-radius: 20px; }
-  .qr-overlay div { text-align: center; color: var(--warning-dark); font-weight: 700; font-size: 12px; }
-  .qr-overlay i { font-size: 24px; display: block; margin-bottom: 4px; }
-
+  
   .qr-info { margin-top: 16px; text-align: center; }
   .qr-amount { font-family: 'Space Grotesk'; font-size: 20px; font-weight: 700; color: var(--gold); }
   .qr-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
@@ -363,7 +359,7 @@
     setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  // === EMAILJS & SUBMIT ===
+  // === EMAILJS & SUBMIT (ADMIN + AUTO REPLY) ===
   btnPay.addEventListener('click', function() {
     if (btnPay.disabled) return;
     
@@ -376,27 +372,36 @@
     reader.onload = function(e) {
       const base64File = e.target.result.split(',')[1];
       
+      // Parameter yang akan dikirim ke EmailJS
       const templateParams = {
         to_name: "Admin JNS Festival",
         from_name: order.nama,
-        reply_to: order.email || 'noreply@jnsfestival.id',
+        reply_to: order.email, // Email pemesan (untuk auto-reply)
         order_id: orderId,
         nama_pemesan: order.nama,
         wa_pemesan: order.wa,
+        email_pemesan: order.email,
         tiket: tiketText,
         jumlah: order.jumlah_tiket,
         total_bayar: totalStr,
-        // Lampiran EmailJS (maks 50KB - 1MB tergantung paket)
-        // Jika file terlalu besar, EmailJS mungkin menolak. Disarankan compress gambar sebelum upload.
+        status_pembayaran: "PENDING",
+        // Lampiran (Maks 50KB - 1MB tergantung paket EmailJS)
         attachment: base64File,
         file_name: uploadedFile.name
       };
 
-      loadingSub.textContent = 'Mengirim email ke admin...';
+      loadingSub.textContent = 'Mengirim email ke admin & pembeli...';
 
-      emailjs.send('service_u5w94nj', 'template_6of1na4', templateParams)
-        .then(function(response) {
-          console.log('SUCCESS!', response.status, response.text);
+      // 1. KIRIM EMAIL KE ADMIN (template_6of1na4)
+      const adminEmail = emailjs.send('service_u5w94nj', 'template_6of1na4', templateParams);
+      
+      // 2. KIRIM AUTO-REPLY KE PEMESAN (template_autoreply) 
+      const autoReplyEmail = emailjs.send('service_u5w94nj', 'template_autoreply', templateParams);
+
+      // Jalankan kedua pengiriman secara bersamaan
+      Promise.all([adminEmail, autoReplyEmail])
+        .then(function(responses) {
+          console.log('Email admin & auto-reply berhasil terkirim!', responses);
           loadingSub.textContent = 'Pembayaran dikonfirmasi!';
           
           // Hapus data lokal
@@ -406,8 +411,9 @@
           setTimeout(() => {
             window.location.href = 'success.html';
           }, 1500);
-        }, function(error) {
-          console.log('FAILED...', error);
+        })
+        .catch(function(error) {
+          console.log('Gagal mengirim salah satu email...', error);
           loading.classList.remove('active');
           showToast('Gagal mengirim data. Coba lagi.', 'error');
         });
