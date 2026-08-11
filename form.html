@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"></noscript>
 
@@ -28,7 +28,7 @@
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg-main); color: var(--text-main);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     padding-bottom: calc(100px + var(--safe-bottom));
     overflow-x: hidden; -webkit-font-smoothing: antialiased;
     background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255,107,0,0.06) 0%, transparent 60%);
@@ -52,7 +52,7 @@
   .step.done .step-num{background:var(--success);color:#fff}
   .step-label{font-size:12px;color:var(--text-muted);font-weight:500;white-space:nowrap}
   .step-divider{width:32px;height:2px;background:#e8e8e8;margin:0 8px;flex-shrink:0;border-radius:2px;transition:background .3s}
-  .step.active+.step-divider,.step-divider.passed{background:var(--btn-orange);opacity:.3}
+  .step-divider.passed{background:var(--success);opacity:.5}
   @media(max-width:640px){.step-label{display:none}.step-divider{width:16px;margin:0 4px}.steps-inner{padding:14px 16px}}
 
   .container { max-width: 800px; margin: 0 auto; padding: 28px 24px; }
@@ -101,7 +101,7 @@
 
   .sticky-bar { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); padding: 16px 24px; padding-bottom: calc(16px + var(--safe-bottom)); box-shadow: 0 -4px 30px rgba(0,0,0,0.06); border-top: 1px solid var(--card-border); z-index: 100; }
   .sticky-inner { max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-  .btn { width: 100%; max-width: 300px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 15px 36px; border: none; border-radius: var(--radius-sm); background: var(--btn-orange); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .25s; letter-spacing: 0.3px; position: relative; overflow: hidden; }
+  .btn { width: 100%; max-width: 300px; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 15px 36px; border: none; border-radius: var(--radius-sm); background: var(--btn-orange); color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .25s; letter-spacing: 0.3px; position: relative; overflow: hidden; font-family: inherit; }
   .btn:hover:not(:disabled) { background: var(--btn-orange-hover); box-shadow: 0 4px 18px rgba(255,107,0,0.35); transform: translateY(-1px); }
   .btn:disabled { background: var(--btn-orange-disabled); cursor: not-allowed; box-shadow: none; transform: none; }
 
@@ -168,6 +168,7 @@
 
   <section class="card" aria-labelledby="summary-title">
     <div class="title" id="summary-title"><i class="fa-solid fa-receipt"></i> Ringkasan Pesanan</div>
+    <div class="summary-row"><span class="label-text">Order ID</span><strong id="orderIdDisplay">-</strong></div>
     <div class="summary-row"><span class="label-text">Jenis Tiket</span><strong id="jenisTiket">-</strong></div>
     <div id="detailTiket" aria-live="polite"></div>
     <div class="summary-row"><span class="label-text">Jumlah Tiket</span><strong id="jumlahTiket">0</strong></div>
@@ -223,7 +224,7 @@
       <label for="wa">No. WhatsApp Aktif<span class="required">*</span></label>
       <div class="input-icon-wrap">
         <i class="fa-solid fa-phone input-icon"></i>
-        <input id="wa" name="wa" type="tel" placeholder="08xxxxxxxxxx" autocomplete="tel" maxlength="16" inputmode="numeric" aria-required="true">
+        <input id="wa" name="wa" type="tel" placeholder="08xxxxxxxxxx" autocomplete="tel" maxlength="15" inputmode="numeric" aria-required="true">
       </div>
       <div class="field-error" id="wa-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i> No. WhatsApp harus 8-15 digit angka.</div>
     </div>
@@ -252,7 +253,7 @@
 
 <footer class="sticky-bar">
   <div class="sticky-inner">
-    <button class="btn" id="lanjut" type="submit" form="orderForm">
+    <button class="btn" id="lanjut" type="button">
       <i class="fa-solid fa-arrow-right-to-bracket"></i>
       <span>LANJUT KE PEMBAYARAN</span>
     </button>
@@ -271,6 +272,17 @@
 (function() {
   'use strict';
 
+  // ===== GENERATE ORDER ID =====
+  function generateOrderId() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return 'JNS-' + y + m + d + '-' + rand;
+  }
+
+  // ===== TOAST =====
   let toastTimer;
   function showToast(msg, type) {
     const t = document.getElementById('toast');
@@ -285,6 +297,7 @@
     toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
   }
 
+  // ===== PARSE URL PARAMS =====
   const urlParams = new URLSearchParams(window.location.search);
   const cartItems = [];
   let totalQty = 0;
@@ -319,6 +332,14 @@
     return;
   }
 
+  // ===== GENERATE & STORE ORDER ID =====
+  let orderId = sessionStorage.getItem('jns_order_id');
+  if (!orderId) {
+    orderId = generateOrderId();
+    sessionStorage.setItem('jns_order_id', orderId);
+  }
+
+  // ===== DOM ELEMENTS =====
   const namaEl = document.getElementById('nama');
   const identitasEl = document.getElementById('identitas');
   const nomorIdEl = document.getElementById('nomorId');
@@ -331,6 +352,8 @@
   const lanjutBtn = document.getElementById('lanjut');
   const orderForm = document.getElementById('orderForm');
 
+  // ===== RENDER SUMMARY =====
+  document.getElementById('orderIdDisplay').textContent = orderId;
   document.getElementById('totalBayar').textContent = 'Rp ' + totalPrice.toLocaleString('id-ID');
   document.getElementById('jumlahTiket').textContent = totalQty;
 
@@ -358,6 +381,7 @@
   detailEl.appendChild(fragment);
   jenisEl.textContent = jenisText;
 
+  // ===== DRAFT SAVE/RESTORE =====
   let saveTimer;
   function saveDraft() {
     clearTimeout(saveTimer);
@@ -367,18 +391,18 @@
           nama: namaEl.value, identitas: identitasEl.value, nomorId: nomorIdEl.value,
           email: emailEl.value, wa: waEl.value, alamat: alamatEl.value, ts: Date.now()
         };
-        localStorage.setItem('goers_draft', JSON.stringify(draft));
+        localStorage.setItem('jns_draft', JSON.stringify(draft));
       } catch(e) {}
     }, 300);
   }
 
   function restoreDraft() {
     try {
-      const raw = localStorage.getItem('goers_draft');
+      const raw = localStorage.getItem('jns_draft');
       if (!raw) return;
       const draft = JSON.parse(raw);
       if (draft.ts && (Date.now() - draft.ts) > 86400000) {
-        localStorage.removeItem('goers_draft');
+        localStorage.removeItem('jns_draft');
         return;
       }
       namaEl.value = draft.nama || '';
@@ -396,12 +420,14 @@
     el.addEventListener('change', saveDraft);
   });
 
+  // ===== WA SANITIZATION =====
   waEl.addEventListener('input', function() {
     let val = this.value.replace(/[^0-9]/g, '');
-    if (val.length > 16) val = val.slice(0, 16);
+    if (val.length > 15) val = val.slice(0, 15);
     if (val !== this.value) this.value = val;
   });
 
+  // ===== VALIDATION =====
   function clearError(field) {
     field.classList.remove('error');
     const errEl = document.getElementById(field.id + '-error');
@@ -433,6 +459,7 @@
     return true;
   }
 
+  // ===== SUBMIT =====
   let isSubmitting = false;
 
   function submitOrder() {
@@ -465,17 +492,22 @@
     lanjutBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>MEMPROSES...</span>';
 
     const orderData = {
+      order_id: orderId,
       nama: namaEl.value.trim(), wa: waEl.value.trim(), email: emailEl.value.trim(),
       identitas: identitasEl.value, nomor_id: nomorIdEl.value.trim(), alamat: alamatEl.value.trim(),
       detail_pesanan: cartItems, jumlah_tiket: totalQty, total_bayar: totalPrice,
-      timestamp: new Date().toISOString(), source: 'goers-form-jns-2026'
+      timestamp: new Date().toISOString(), source: 'jns-form-2026'
     };
 
+    // Simpan ke localStorage untuk halaman selanjutnya
     try {
-      localStorage.setItem('goers_order', JSON.stringify(orderData));
-      localStorage.removeItem('goers_draft');
+      localStorage.setItem('jns_order', JSON.stringify(orderData));
+      localStorage.setItem('jns_order_id', orderId);
+      localStorage.removeItem('jns_draft');
+      sessionStorage.setItem('jns_flow_step', 'qris');
     } catch(e) {}
 
+    // Kirim ke Formspree (fire and forget, dengan error handling)
     try {
       fetch('https://formspree.io/f/mojojdpl', {
         method: 'POST',
@@ -485,22 +517,22 @@
       }).catch(e => console.warn('Formspree error:', e));
     } catch(e) {}
 
-    const qrisParams = new URLSearchParams({
-      nama: orderData.nama, wa: orderData.wa,
-      totalQty: String(totalQty), total: String(totalPrice)
-    });
-
+    // Redirect ke qris.html
     setTimeout(() => {
-      window.location.href = 'qris.html?' + qrisParams.toString();
+      window.location.href = 'qris.html';
     }, 600);
   }
 
+  // HANYA satu listener - tombol type="button" supaya tidak double submit
+  lanjutBtn.addEventListener('click', submitOrder);
+
+  // Form submit dicegah karena tombol type=button, tapi jaga-jaga
   orderForm.addEventListener('submit', function(e) {
     e.preventDefault();
     submitOrder();
   });
-  lanjutBtn.addEventListener('click', submitOrder);
 
+  // Reset state saat back from bfcache
   window.addEventListener('pageshow', function(event) {
     if (event.persisted) {
       isSubmitting = false;
@@ -510,6 +542,7 @@
     }
   });
 
+  // Enter pada checkbox setuju → submit
   setuju2El.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && this.checked) {
       e.preventDefault();
