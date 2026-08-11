@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 <style>
   :root {
@@ -26,6 +26,7 @@
     --warning-glow: rgba(245, 158, 11, 0.4);
     --danger: #EF4444;
     --gold: #F5C842;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -34,7 +35,7 @@
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg-main);
     color: #fff;
-    padding-bottom: 130px;
+    padding-bottom: calc(130px + var(--safe-bottom));
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
     position: relative;
@@ -605,6 +606,7 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     padding: 14px 20px;
+    padding-bottom: calc(14px + var(--safe-bottom));
     border-top: 1px solid var(--card-border);
     z-index: 100;
   }
@@ -776,7 +778,7 @@
   <div class="action-row">
     <a href="index.html" class="action-chip"><i class="fa-solid fa-house"></i> Beranda</a>
     <a href="qris.html" class="action-chip"><i class="fa-solid fa-rotate"></i> Coba Bayar Lagi</a>
-    <a href="https://wa.me/62895627108514" target="_blank" class="action-chip"><i class="fa-brands fa-whatsapp"></i> Bantuan</a>
+    <a href="https://wa.me/62895627108514" target="_blank" rel="noopener" class="action-chip"><i class="fa-brands fa-whatsapp"></i> Bantuan</a>
   </div>
 
   <div class="help-box">
@@ -785,7 +787,7 @@
       <strong>Butuh bantuan dengan transaksi Anda?</strong>
       <span>Hubungi support kami via WhatsApp untuk bantuan refund dan pembayaran ulang.</span>
     </div>
-    <a href="https://wa.me/62895627108514" target="_blank" class="help-btn">
+    <a href="https://wa.me/62895627108514" target="_blank" rel="noopener" class="help-btn">
       <i class="fa-brands fa-whatsapp"></i> Hubungi
     </a>
   </div>
@@ -804,15 +806,16 @@
 </div>
 
 <script>
-  var order = JSON.parse(localStorage.getItem('goers_order') || '{}');
-  var orderId = localStorage.getItem('goers_order_id') || 'JNS-000';
+  'use strict';
 
-  if (!order.detail_pesanan) {
-    order = {
-      nama: 'Tamu JNS',
-      detail_pesanan: [{ name: 'Presale 1 Festival - JNS Festival 2026' }],
-      jumlah_tiket: 1
-    };
+  // ===== LOAD DATA =====
+  var order = JSON.parse(localStorage.getItem('jns_order') || '{}');
+  var orderId = localStorage.getItem('jns_order_id') || 'JNS-000';
+
+  // Jika tidak ada data order, redirect ke index (kecuali user memang ingin lihat demo)
+  if (!order.detail_pesanan || order.detail_pesanan.length === 0) {
+    // Jangan tampilkan dummy data - redirect ke beranda
+    window.location.replace('index.html');
   }
 
   var detailPesanan = order.detail_pesanan || [];
@@ -824,17 +827,27 @@
   document.getElementById('jenisTiket').textContent = jenisTiketText;
   document.getElementById('jumlahTiket').textContent = totalQty + ' Tiket';
 
+  // ===== COUNTDOWN REFUND 24 JAM =====
+  // Ambil order_id untuk key unik timer
+  var timerKey = 'jns_refund_start_' + orderId;
+  
   (function() {
-    var storedStart = localStorage.getItem('goers_refund_start_time');
+    var storedStart = localStorage.getItem(timerKey);
     var startTime;
     if (storedStart) {
       startTime = parseInt(storedStart, 10);
+      // Cek apakah timer sudah expired (> 24 jam)
+      if (Date.now() - startTime > 24 * 60 * 60 * 1000) {
+        // Reset untuk order baru
+        startTime = Date.now();
+        localStorage.setItem(timerKey, startTime.toString());
+      }
     } else {
       startTime = Date.now();
-      localStorage.setItem('goers_refund_start_time', startTime.toString());
+      localStorage.setItem(timerKey, startTime.toString());
     }
 
-    var duration = 24 * 60 * 60;
+    var duration = 24 * 60 * 60; // 24 jam dalam detik
 
     function updateCountdown() {
       var now = Math.floor(Date.now() / 1000);
@@ -861,6 +874,19 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
   })();
+
+  // ===== CLEANUP: Hapus refund timer yang sudah expired =====
+  // Hanya untuk key order lain, biarkan current tetap
+  try {
+    Object.keys(localStorage).forEach(function(key) {
+      if (key.indexOf('jns_refund_start_') === 0 && key !== timerKey) {
+        var ts = parseInt(localStorage.getItem(key), 10);
+        if (Date.now() - ts > 24 * 60 * 60 * 1000) {
+          localStorage.removeItem(key);
+        }
+      }
+    });
+  } catch(e) {}
 </script>
 
 </body>
